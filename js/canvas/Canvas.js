@@ -1,44 +1,36 @@
 import { drawSnakeHead } from '../snake/Snake.js';
 
-const snakeSpeed = 20;
+// const snakeSpeed = 20;
 
 window.onload = () => {
 	let canvas = document.getElementById('gameCanvas');
 	let canvasContext = canvas.getContext('2d');
+
 	const framesPerSecond = 30;
 
 	setInterval(() => {
-		drawSnakeHead(canvasContext);
+		drawSnakeHead(20, 140, canvasContext);
 	}, 1000 / framesPerSecond);
 
-	canvas.onkeydown = (e) => {
-		if (e.key == 'Right' || e.key == 'ArrowRight') {
-			RIGHT = true;
-		} else if (e.key == 'Left' || e.key == 'ArrowLeft') {
-			LEFT = true;
+	window.addEventListener('keydown', (e) => {
+		// console.log(e);
+
+		switch (e.key) {
+			case 'ArrowUp':
+				console.log('arrow up');
+				drawSnakeHead(20, 120, canvasContext);
+				break;
+			case 'ArrowRight':
+				console.log('arrow right');
+				break;
+			case 'ArrowDown':
+				console.log('arrow down');
+				break;
+			case 'ArrowLeft':
+				console.log('arrow left');
+				break;
+			default:
+				break;
 		}
-	};
-
-	canvas.onkeyup('keyup', keyUpHandler, false);
-};
-
-let UP = false;
-let RIGHT = false;
-let DOWN = false;
-let LEFT = false;
-
-const keyDownHandler = (e) => {
-	if (e.key == 'Right' || e.key == 'ArrowRight') {
-		RIGHT = true;
-	} else if (e.key == 'Left' || e.key == 'ArrowLeft') {
-		LEFT = true;
-	}
-};
-
-const keyUpHandler = (e) => {
-	if (e.key == 'Right' || e.key == 'ArrowRight') {
-		RIGHT = false;
-	} else if (e.key == 'Left' || e.key == 'ArrowLeft') {
-		LEFT = false;
-	}
+	});
 };
