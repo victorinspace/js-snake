@@ -1,13 +1,44 @@
-import { drawRect } from '../elements/Elements.js';
+import { drawSnakeHead } from '../snake/Snake.js';
 
-export let canvas = null;
-export let canvasContext = null;
+const snakeSpeed = 20;
 
 window.onload = () => {
-	canvas = document.getElementById('gameCanvas');
-	canvasContext = canvas.getContext('2d');
+	let canvas = document.getElementById('gameCanvas');
+	let canvasContext = canvas.getContext('2d');
+	const framesPerSecond = 30;
 
-	drawRect(canvasContext, 300, 400, 20, 20, 'green');
+	setInterval(() => {
+		drawSnakeHead(canvasContext);
+	}, 1000 / framesPerSecond);
 
-	console.log(canvasContext);
+	canvas.onkeydown = (e) => {
+		if (e.key == 'Right' || e.key == 'ArrowRight') {
+			RIGHT = true;
+		} else if (e.key == 'Left' || e.key == 'ArrowLeft') {
+			LEFT = true;
+		}
+	};
+
+	canvas.onkeyup('keyup', keyUpHandler, false);
+};
+
+let UP = false;
+let RIGHT = false;
+let DOWN = false;
+let LEFT = false;
+
+const keyDownHandler = (e) => {
+	if (e.key == 'Right' || e.key == 'ArrowRight') {
+		RIGHT = true;
+	} else if (e.key == 'Left' || e.key == 'ArrowLeft') {
+		LEFT = true;
+	}
+};
+
+const keyUpHandler = (e) => {
+	if (e.key == 'Right' || e.key == 'ArrowRight') {
+		RIGHT = false;
+	} else if (e.key == 'Left' || e.key == 'ArrowLeft') {
+		LEFT = false;
+	}
 };
