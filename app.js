@@ -44,8 +44,17 @@ const drawSnake = (x, y, context) => {
 	context.closePath();
 };
 
+const drawApple = (x, y, context) => {
+	context.beginPath();
+	context.fillStyle = 'red';
+	context.arc(100, 100, 10 / 2, 0, Math.PI * 2, true);
+	context.fill();
+	context.closePath();
+};
+
 const startGame = (context) => {
 	drawSnake(150, 150, context);
+	drawApple(20, 140, context);
 };
 
 const welcomeText = (context, status) => {
