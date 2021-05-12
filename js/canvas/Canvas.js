@@ -42,6 +42,7 @@ window.onload = () => {
 	let canvas = document.getElementById('gameCanvas');
 	let context = canvas.getContext('2d');
 	let newSnake = new Snake(20, 140);
+	let isKeyUp = true;
 
 	const framesPerSecond = 30;
 	const snakeSpeed = 5;
@@ -51,21 +52,29 @@ window.onload = () => {
 		// newSnake.move(snakeSpeed);
 
 		window.addEventListener('keydown', (e) => {
+			e.preventDefault();
 			switch (e.key) {
 				case 'ArrowUp':
 					console.log('arrow up');
+					newSnake.draw(context);
 					newSnake.moveUp(snakeSpeed);
+					console.log(newSnake);
 					break;
 				case 'ArrowRight':
+					debugger;
 					console.log('arrow right');
+					newSnake.draw(context);
 					newSnake.moveRight(snakeSpeed);
+					console.log(newSnake);
 					break;
 				case 'ArrowDown':
 					console.log('arrow down');
+					newSnake.draw(context);
 					newSnake.moveDown(snakeSpeed);
 					break;
 				case 'ArrowLeft':
 					console.log('arrow left');
+					newSnake.draw(context);
 					newSnake.moveLeft(snakeSpeed);
 					break;
 				default:
