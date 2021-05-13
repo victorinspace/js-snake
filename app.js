@@ -1,3 +1,6 @@
+let snakeX = 150;
+let snakeY = 150;
+
 class Snake {
 	constructor(xPos, yPos) {
 		this.xPos = xPos;
@@ -16,23 +19,6 @@ class Snake {
 		context.rect(this.xPos, this.yPos, 10, 10);
 		context.fill();
 		context.closePath();
-	};
-
-	move = (deltaX) => {
-		this.xPos += deltaX;
-	};
-
-	moveUp = (deltaY) => {
-		this.yPos -= deltaY;
-	};
-	moveRight = (deltaX) => {
-		this.xPos += deltaX;
-	};
-	moveDown = (deltaY) => {
-		this.yPos += deltaY;
-	};
-	moveLeft = (deltaX) => {
-		this.xPos -= deltaX;
 	};
 }
 
@@ -62,11 +48,10 @@ const welcomeText = (context, status) => {
 	let welcomeMessage = 'press any key to begin';
 
 	if (displayStatus === true) {
-		console.log('yes');
 		context.font = '20px serif';
 		context.fillStyle = 'white';
 		context.textAlign = 'center';
-		context.fillText(welcomeMessage, 150, 50);
+		context.fillText(welcomeMessage, 260, 50);
 	} else if (displayStatus === false) {
 		context.beginPath();
 		context.fillStyle = 'black';
@@ -76,30 +61,23 @@ const welcomeText = (context, status) => {
 	}
 };
 
-const snakeDirection = (e) => {
+const snakeDirection = (e, context) => {
+	const snakeSpeed = 5;
 	switch (e.key) {
 		case 'ArrowUp':
 			console.log('arrow up');
-			newSnake.draw(context);
-			newSnake.moveUp(snakeSpeed);
-			console.log(newSnake);
+			snakeY += snakeSpeed;
+			drawSnake(snakeX, snakeY, context);
 			break;
 		case 'ArrowRight':
 			debugger;
 			console.log('arrow right');
-			newSnake.draw(context);
-			newSnake.moveRight(snakeSpeed);
-			console.log(newSnake);
 			break;
 		case 'ArrowDown':
 			console.log('arrow down');
-			newSnake.draw(context);
-			newSnake.moveDown(snakeSpeed);
 			break;
 		case 'ArrowLeft':
 			console.log('arrow left');
-			newSnake.draw(context);
-			newSnake.moveLeft(snakeSpeed);
 			break;
 		default:
 			break;
@@ -114,22 +92,25 @@ window.onload = () => {
 	const framesPerSecond = 30;
 	const snakeSpeed = 3;
 
-	if (gameStarted === false) {
-		welcomeText(context, true);
+	setInterval(() => {
+		if (gameStarted === false) {
+			welcomeText(context, true);
+		} else if (gameStarted === true) {
+			welcomeText(contexst, false);
+		}
+	}, 1000 / framesPerSecond);
 
-		window.addEventListener(
-			'keydown',
-			(e) => {
-				e.preventDefault();
-				welcomeText(context, false);
-
-				setInterval(() => {
-					startGame(context);
-				});
-			},
-			1000 / framesPerSecond
-		);
-	} else if (gameStarted) {
-		return;
-	}
+	// if (gameStarted === false) {
+	// 	welcomeText(context, true);
+	// } else if (gameStarted === true) {
+	// 	welcomeText(contexst, false);
+	// }
 };
+
+// window.addEventListener(
+//   'keydown',
+//   (e) => {
+//     e.preventDefault();
+//     welcomeText(context, false);
+//   }
+// )
