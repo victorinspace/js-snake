@@ -44,7 +44,7 @@ const drawSnake = (x, y, context) => {
 	context.closePath();
 };
 
-const drawApple = (x, y, context) => {
+const drawApple = (context) => {
 	context.beginPath();
 	context.fillStyle = 'red';
 	context.arc(100, 100, 10 / 2, 0, Math.PI * 2, true);
@@ -54,7 +54,7 @@ const drawApple = (x, y, context) => {
 
 const startGame = (context) => {
 	drawSnake(150, 150, context);
-	drawApple(20, 140, context);
+	drawApple(context);
 };
 
 const welcomeText = (context, status) => {
@@ -62,12 +62,47 @@ const welcomeText = (context, status) => {
 	let welcomeMessage = 'press any key to begin';
 
 	if (displayStatus === true) {
+		console.log('yes');
 		context.font = '20px serif';
 		context.fillStyle = 'white';
 		context.textAlign = 'center';
-		context.fillText(welcomeMessage, 150, 150);
+		context.fillText(welcomeMessage, 150, 50);
 	} else if (displayStatus === false) {
-		context.fillText('', 0, 0);
+		context.beginPath();
+		context.fillStyle = 'black';
+		context.rect(0, 0, 300, 300);
+		context.fill();
+		context.closePath();
+	}
+};
+
+const snakeDirection = (e) => {
+	switch (e.key) {
+		case 'ArrowUp':
+			console.log('arrow up');
+			newSnake.draw(context);
+			newSnake.moveUp(snakeSpeed);
+			console.log(newSnake);
+			break;
+		case 'ArrowRight':
+			debugger;
+			console.log('arrow right');
+			newSnake.draw(context);
+			newSnake.moveRight(snakeSpeed);
+			console.log(newSnake);
+			break;
+		case 'ArrowDown':
+			console.log('arrow down');
+			newSnake.draw(context);
+			newSnake.moveDown(snakeSpeed);
+			break;
+		case 'ArrowLeft':
+			console.log('arrow left');
+			newSnake.draw(context);
+			newSnake.moveLeft(snakeSpeed);
+			break;
+		default:
+			break;
 	}
 };
 
@@ -103,33 +138,33 @@ window.onload = () => {
 
 	// 	// window.addEventListener('keydown', (e) => {
 	// 	// 	e.preventDefault();
-	// 	// 	switch (e.key) {
-	// 	// 		case 'ArrowUp':
-	// 	// 			console.log('arrow up');
-	// 	// 			newSnake.draw(context);
-	// 	// 			newSnake.moveUp(snakeSpeed);
-	// 	// 			console.log(newSnake);
-	// 	// 			break;
-	// 	// 		case 'ArrowRight':
-	// 	// 			debugger;
-	// 	// 			console.log('arrow right');
-	// 	// 			newSnake.draw(context);
-	// 	// 			newSnake.moveRight(snakeSpeed);
-	// 	// 			console.log(newSnake);
-	// 	// 			break;
-	// 	// 		case 'ArrowDown':
-	// 	// 			console.log('arrow down');
-	// 	// 			newSnake.draw(context);
-	// 	// 			newSnake.moveDown(snakeSpeed);
-	// 	// 			break;
-	// 	// 		case 'ArrowLeft':
-	// 	// 			console.log('arrow left');
-	// 	// 			newSnake.draw(context);
-	// 	// 			newSnake.moveLeft(snakeSpeed);
-	// 	// 			break;
-	// 	// 		default:
-	// 	// 			break;
-	// 	// 	}
+	// switch (e.key) {
+	// 	case 'ArrowUp':
+	// 		console.log('arrow up');
+	// 		newSnake.draw(context);
+	// 		newSnake.moveUp(snakeSpeed);
+	// 		console.log(newSnake);
+	// 		break;
+	// 	case 'ArrowRight':
+	// 		debugger;
+	// 		console.log('arrow right');
+	// 		newSnake.draw(context);
+	// 		newSnake.moveRight(snakeSpeed);
+	// 		console.log(newSnake);
+	// 		break;
+	// 	case 'ArrowDown':
+	// 		console.log('arrow down');
+	// 		newSnake.draw(context);
+	// 		newSnake.moveDown(snakeSpeed);
+	// 		break;
+	// 	case 'ArrowLeft':
+	// 		console.log('arrow left');
+	// 		newSnake.draw(context);
+	// 		newSnake.moveLeft(snakeSpeed);
+	// 		break;
+	// 	default:
+	// 		break;
+	// }
 	// 	// });
 	// }, 1000 / framesPerSecond);
 };
