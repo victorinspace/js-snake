@@ -3,16 +3,6 @@ window.onload = () => {
 	let canvasContext = canvas.getContext('2d');
 	const framesPerSecond = 30;
 
-	const randomEvenNumber = (canvasSize) => {
-		let randomNumber = Math.floor(Math.random() * canvasSize);
-
-		if (randomNumber % 2 === 1) {
-			randomNumber++;
-		}
-
-		return randomNumber;
-	};
-
 	const APPLE = {
 		size: 9,
 		color: 'red',
@@ -22,11 +12,21 @@ window.onload = () => {
 	const SNAKE = {
 		size: 20,
 		color: 'green',
-		travelSpeed: 20,
+		travelSpeed: 5,
 		coordinates: {
 			xPos: canvas.width / 2.1,
 			yPos: canvas.width / 2.1,
 		},
+	};
+
+	const randomEvenNumber = (canvasSize) => {
+		let randomNumber = Math.floor(Math.random() * canvasSize);
+
+		if (randomNumber % 2 === 1) {
+			randomNumber++;
+		}
+
+		return randomNumber;
 	};
 
 	const drawBackground = () => {
