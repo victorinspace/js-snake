@@ -1,116 +1,86 @@
-let snakeX = 150;
-let snakeY = 150;
+window.onload = () => {
+	class Snake {
+		constructor(xPos, yPos) {
+			this.xPos = xPos;
+			this.yPos = yPos;
+		}
 
-class Snake {
-	constructor(xPos, yPos) {
-		this.xPos = xPos;
-		this.yPos = yPos;
+		draw = (context) => {
+			context.beginPath();
+			context.fillStyle = 'black';
+			context.rect(0, 0, 300, 300);
+			context.fill();
+			context.closePath();
+
+			context.beginPath();
+			context.fillStyle = 'green';
+			context.rect(this.xPos, this.yPos, 10, 10);
+			context.fill();
+			context.closePath();
+		};
 	}
 
-	draw = (context) => {
-		context.beginPath();
-		context.fillStyle = 'black';
-		context.rect(0, 0, 300, 300);
-		context.fill();
-		context.closePath();
+	const randomNumberGenerator = () => {
+		Math.floor(Math.random() * 10);
+	};
 
+	const APPLE = {
+		size: 10,
+		xPos: Math.floor(),
+	};
+
+	const drawSnake = (x, y, context) => {
 		context.beginPath();
 		context.fillStyle = 'green';
-		context.rect(this.xPos, this.yPos, 10, 10);
+		context.rect(x, y, 20, 20);
 		context.fill();
 		context.closePath();
 	};
-}
 
-const drawSnake = (x, y, context) => {
-	context.beginPath();
-	context.fillStyle = 'green';
-	context.rect(x, y, 10, 10);
-	context.fill();
-	context.closePath();
-};
-
-const drawApple = (context) => {
-	context.beginPath();
-	context.fillStyle = 'red';
-	context.arc(100, 100, 10 / 2, 0, Math.PI * 2, true);
-	context.fill();
-	context.closePath();
-};
-
-const startGame = (context) => {
-	drawSnake(150, 150, context);
-	drawApple(context);
-};
-
-const welcomeText = (context, status) => {
-	let displayStatus = status;
-	let welcomeMessage = 'press any key to begin';
-
-	if (displayStatus === true) {
-		context.font = '20px serif';
-		context.fillStyle = 'white';
-		context.textAlign = 'center';
-		context.fillText(welcomeMessage, 260, 50);
-	} else if (displayStatus === false) {
+	const drawApple = (context) => {
 		context.beginPath();
-		context.fillStyle = 'black';
-		context.rect(0, 0, 300, 300);
+		context.fillStyle = 'red';
+		context.arc(100, 100, 10 / 2, 0, Math.PI * 2, true);
 		context.fill();
 		context.closePath();
-	}
-};
+	};
 
-const snakeDirection = (e, context) => {
-	const snakeSpeed = 5;
-	switch (e.key) {
-		case 'ArrowUp':
-			console.log('arrow up');
-			snakeY += snakeSpeed;
-			drawSnake(snakeX, snakeY, context);
-			break;
-		case 'ArrowRight':
-			debugger;
-			console.log('arrow right');
-			break;
-		case 'ArrowDown':
-			console.log('arrow down');
-			break;
-		case 'ArrowLeft':
-			console.log('arrow left');
-			break;
-		default:
-			break;
-	}
-};
+	const startGame = (context) => {
+		drawSnake(150, 150, context);
+		drawApple(context);
+	};
 
-window.onload = () => {
-	let gameStarted = false;
 	let canvas = document.getElementById('gameCanvas');
 	let context = canvas.getContext('2d');
-
 	const framesPerSecond = 30;
-	const snakeSpeed = 3;
 
 	setInterval(() => {
-		if (gameStarted === false) {
-			welcomeText(context, true);
-		} else if (gameStarted === true) {
-			welcomeText(contexst, false);
-		}
+		drawSnake(canvas.width / 2, canvas.height / 2, context);
+
+		window.addEventListener('keydown', handleKeyDownEvent);
 	}, 1000 / framesPerSecond);
 
-	// if (gameStarted === false) {
-	// 	welcomeText(context, true);
-	// } else if (gameStarted === true) {
-	// 	welcomeText(contexst, false);
-	// }
-};
+	const handleKeyDownEvent = (e) => {
+		snakeDirection(e);
+	};
 
-// window.addEventListener(
-//   'keydown',
-//   (e) => {
-//     e.preventDefault();
-//     welcomeText(context, false);
-//   }
-// )
+	const snakeDirection = (e) => {
+		switch (e.key) {
+			case 'ArrowUp':
+				console.log('arrow up');
+				snake[0].y -= 5;
+				break;
+			case 'ArrowRight':
+				console.log('arrow right');
+				break;
+			case 'ArrowDown':
+				console.log('arrow down');
+				break;
+			case 'ArrowLeft':
+				console.log('arrow left');
+				break;
+			default:
+				break;
+		}
+	};
+};
