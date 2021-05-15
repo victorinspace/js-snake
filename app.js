@@ -1,61 +1,63 @@
 window.onload = () => {
-	class Snake {
-		constructor(xPos, yPos) {
-			this.xPos = xPos;
-			this.yPos = yPos;
+	let canvas = document.getElementById('gameCanvas');
+	let canvasContext = canvas.getContext('2d');
+	const framesPerSecond = 30;
+
+	const randomEvenNumber = (canvasSize) => {
+		let randomNumber = Math.floor(Math.random() * canvasSize);
+
+		if (randomNumber % 2 === 1) {
+			randomNumber++;
 		}
 
-		draw = (context) => {
-			context.beginPath();
-			context.fillStyle = 'black';
-			context.rect(0, 0, 300, 300);
-			context.fill();
-			context.closePath();
-
-			context.beginPath();
-			context.fillStyle = 'green';
-			context.rect(this.xPos, this.yPos, 10, 10);
-			context.fill();
-			context.closePath();
-		};
-	}
-
-	const randomNumberGenerator = () => {
-		Math.floor(Math.random() * 10);
+		return randomNumber;
 	};
 
 	const APPLE = {
 		size: 10,
-		xPos: Math.floor(),
+		color: 'red',
+		points: 1,
 	};
 
-	const drawSnake = (x, y, context) => {
-		context.beginPath();
-		context.fillStyle = 'green';
-		context.rect(x, y, 20, 20);
-		context.fill();
-		context.closePath();
+	const SNAKE = {
+		size: 20,
+		color: 'green',
 	};
 
-	const drawApple = (context) => {
-		context.beginPath();
-		context.fillStyle = 'red';
-		context.arc(100, 100, 10 / 2, 0, Math.PI * 2, true);
-		context.fill();
-		context.closePath();
+	const drawBackground = (x, y, canvasContext) => {
+		canvasContext.beginPath();
+		canvasContext.fillStyle = 'black';
+		canvasContext.rect(0, 0, 300, 300);
+		canvasContext.fill();
+		canvasContext.closePath();
 	};
 
-	const startGame = (context) => {
-		drawSnake(150, 150, context);
-		drawApple(context);
+	const drawSnake = (x, y, canvasContext) => {
+		canvasContext.beginPath();
+		canvasContext.fillStyle = SNAKE.color;
+		canvasContext.rect(x, y, SNAKE.size, SNAKE.size);
+		canvasContext.fill();
+		canvasContext.closePath();
 	};
 
-	let canvas = document.getElementById('gameCanvas');
-	let context = canvas.getContext('2d');
-	const framesPerSecond = 30;
-
+	const drawApple = (canvasContext) => {
+		canvasContext.beginPath();
+		canvasContext.fillStyle = APPLE.color;
+		canvasContext.arc(
+			randomEvenNumber(canvas.width) - 2,
+			randomEvenNumber(canvas.width) - 2,
+			APPLE.size,
+			0,
+			Math.PI * 2,
+			true
+		);
+		canvasContext.fill();
+		canvasContext.closePath();
+	};
+	drawApple(canvasContext);
+	// Scan the canvas for human interaction
 	setInterval(() => {
-		drawSnake(canvas.width / 2, canvas.height / 2, context);
+		drawSnake(canvas.width / 2, canvas.height / 2, canvasContext);
 
 		window.addEventListener('keydown', handleKeyDownEvent);
 	}, 1000 / framesPerSecond);
