@@ -14,7 +14,7 @@ window.onload = () => {
 	};
 
 	const APPLE = {
-		size: 10,
+		size: 9,
 		color: 'red',
 		points: 1,
 	};
@@ -22,17 +22,22 @@ window.onload = () => {
 	const SNAKE = {
 		size: 20,
 		color: 'green',
+		travelSpeed: 20,
+		coordinates: {
+			xPos: canvas.width / 2.1,
+			yPos: canvas.width / 2.1,
+		},
 	};
 
-	const drawBackground = (x, y, canvasContext) => {
+	const drawBackground = () => {
 		canvasContext.beginPath();
 		canvasContext.fillStyle = 'black';
-		canvasContext.rect(0, 0, 300, 300);
+		canvasContext.rect(0, 0, canvas.width, canvas.width);
 		canvasContext.fill();
 		canvasContext.closePath();
 	};
 
-	const drawSnake = (x, y, canvasContext) => {
+	const drawSnake = (x, y) => {
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
 		canvasContext.rect(x, y, SNAKE.size, SNAKE.size);
@@ -44,8 +49,8 @@ window.onload = () => {
 		canvasContext.beginPath();
 		canvasContext.fillStyle = APPLE.color;
 		canvasContext.arc(
-			randomEvenNumber(canvas.width) - 2,
-			randomEvenNumber(canvas.width) - 2,
+			randomEvenNumber(canvas.width - 5),
+			randomEvenNumber(canvas.width - 5),
 			APPLE.size,
 			0,
 			Math.PI * 2,
@@ -54,11 +59,12 @@ window.onload = () => {
 		canvasContext.fill();
 		canvasContext.closePath();
 	};
-	drawApple(canvasContext);
-	// Scan the canvas for human interaction
-	setInterval(() => {
-		drawSnake(canvas.width / 2, canvas.height / 2, canvasContext);
 
+	drawApple(canvasContext);
+	drawSnake(SNAKE.coordinates.xPos, SNAKE.coordinates.yPos);
+
+	// game initialized and scanning the canvas for human interaction
+	setInterval(() => {
 		window.addEventListener('keydown', handleKeyDownEvent);
 	}, 1000 / framesPerSecond);
 
@@ -69,17 +75,32 @@ window.onload = () => {
 	const snakeDirection = (e) => {
 		switch (e.key) {
 			case 'ArrowUp':
-				console.log('arrow up');
-				snake[0].y -= 5;
+				drawBackground();
+				drawSnake(
+					SNAKE.coordinates.xPos,
+					(SNAKE.coordinates.yPos -= SNAKE.travelSpeed)
+				);
 				break;
 			case 'ArrowRight':
-				console.log('arrow right');
+				drawBackground();
+				drawSnake(
+					(SNAKE.coordinates.xPos += SNAKE.travelSpeed),
+					SNAKE.coordinates.yPos
+				);
 				break;
 			case 'ArrowDown':
-				console.log('arrow down');
+				drawBackground();
+				drawSnake(
+					SNAKE.coordinates.xPos,
+					(SNAKE.coordinates.yPos += SNAKE.travelSpeed)
+				);
 				break;
 			case 'ArrowLeft':
-				console.log('arrow left');
+				drawBackground();
+				drawSnake(
+					(SNAKE.coordinates.xPos -= SNAKE.travelSpeed),
+					SNAKE.coordinates.yPos
+				);
 				break;
 			default:
 				break;
