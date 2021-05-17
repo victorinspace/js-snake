@@ -9,10 +9,16 @@ window.onload = () => {
 		points: 1,
 	};
 
+	let applePosition = {
+		// initialize apple position
+		xPos: 120,
+		yPos: 120,
+	};
+
 	const SNAKE = {
 		size: 10,
 		color: 'green',
-		travelSpeed: 2,
+		travelSpeed: 5,
 		direction: 'up',
 	};
 
@@ -52,15 +58,11 @@ window.onload = () => {
 		}
 
 		console.log(SNAKE.direction);
+		console.log(`Snake position -- X: ${snakePosition.xPos}, Y: ${snakePosition.yPos}`);
 
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
-		canvasContext.rect(
-			snakePosition.xPos,
-			snakePosition.yPos,
-			SNAKE.size,
-			SNAKE.size
-		);
+		canvasContext.rect(snakePosition.xPos, snakePosition.yPos, SNAKE.size, SNAKE.size);
 		canvasContext.fill();
 		canvasContext.closePath();
 	};
@@ -68,14 +70,8 @@ window.onload = () => {
 	const drawApple = (x, y) => {
 		canvasContext.beginPath();
 		canvasContext.fillStyle = APPLE.color;
-		canvasContext.arc(
-			canvas.width - 5,
-			canvas.width - 5,
-			APPLE.size,
-			0,
-			Math.PI * 2,
-			true
-		);
+		canvasContext.arc(applePosition.xPos, applePosition.yPos, APPLE.size, 0, Math.PI * 2, true);
+		console.log(`Apple location: ${x} ${y}`);
 		canvasContext.fill();
 		canvasContext.closePath();
 	};
@@ -83,19 +79,27 @@ window.onload = () => {
 	const drawEverything = () => {
 		drawBackground();
 		drawSnake();
-		drawApple(canvas.width / 3, canvas.width / 3);
+		drawApple(120, 120);
 	};
 
 	// game initialized and scanning the canvas for human interaction
 	setInterval(() => {
-		// console.log('beep ... beep ...');
-
 		// (heartbeat)
-		drawEverything();
 
 		// move the snake
+		drawEverything();
+
 		// check to see if snake is eating apple
+		if (snakePosition.xPos === applePosition.xPos && snakePosition.yPos === applePosition.yPos) {
+			console.log('apple!');
+		}
+
 		// check if snake is touching boundaries
+		if (snakePosition.yPos === 0 || snakePosition.yPos === canvas.width) {
+			console.log('hit!');
+		} else if (snakePosition.xPos === 0 || snakePosition.xPos === canvas.width) {
+			console.log('hit!');
+		}
 	}, 1000 / framesPerSecond);
 
 	window.addEventListener('keydown', (e) => {
