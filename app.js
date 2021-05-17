@@ -12,18 +12,15 @@ window.onload = () => {
 	const SNAKE = {
 		size: 10,
 		color: 'green',
-		travelSpeed: 5,
-		coordinates: {
-			xPos: canvas.width / 2.1,
-			yPos: canvas.width / 2.1,
-		},
+		travelSpeed: 2,
+		direction: 'up',
 	};
 
-	// let snakePosition = {
-	// 	// initialize snake position
-	// 	xPos: canvas.width / 2,
-	// 	yPos: canvas.width / 2,
-	// };
+	let snakePosition = {
+		// initialize snake position
+		xPos: canvas.width / 2,
+		yPos: canvas.width / 2,
+	};
 
 	const randomEvenNumber = (canvasSize) => {
 		let randomNumber = Math.floor(Math.random() * canvasSize);
@@ -43,16 +40,24 @@ window.onload = () => {
 		canvasContext.closePath();
 	};
 
-	const drawSnake = (x, y) => {
-		SNAKE.coordinates.yPos -= 2;
-		console.log(SNAKE.coordinates.yPos);
+	const drawSnake = () => {
+		if (SNAKE.direction === 'up') {
+			snakePosition.yPos -= SNAKE.travelSpeed;
+		} else if (SNAKE.direction === 'right') {
+			snakePosition.xPos += SNAKE.travelSpeed;
+		} else if (SNAKE.direction === 'down') {
+			snakePosition.yPos += SNAKE.travelSpeed;
+		} else if (SNAKE.direction === 'left') {
+			snakePosition.xPos -= SNAKE.travelSpeed;
+		}
+
+		console.log(SNAKE.direction);
 
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
-		// canvasContext.rect(x, y, SNAKE.size, SNAKE.size);
 		canvasContext.rect(
-			SNAKE.coordinates.xPos,
-			SNAKE.coordinates.yPos,
+			snakePosition.xPos,
+			snakePosition.yPos,
 			SNAKE.size,
 			SNAKE.size
 		);
@@ -75,48 +80,41 @@ window.onload = () => {
 		canvasContext.closePath();
 	};
 
-	const checkSnakeDirection = (e) => {
-		// debugger;
-		switch (e.key) {
-			case 'ArrowUp':
-				SNAKE.coordinates.yPos -= SNAKE.travelSpeed;
-				// snakePosition.yPos -= SNAKE.travelSpeed;
-				console.log(SNAKE.coordinates.yPos);
-
-				break;
-			case 'ArrowRight':
-				SNAKE.coordinates.xPos += SNAKE.travelSpeed;
-				break;
-			case 'ArrowDown':
-				SNAKE.coordinates.yPos += SNAKE.travelSpeed;
-				break;
-			case 'ArrowLeft':
-				SNAKE.coordinates.xPos -= SNAKE.travelSpeed;
-				break;
-			default:
-				break;
-		}
-	};
-
-	const keyEventListener = (e) => {
-		checkSnakeDirection(e);
+	const drawEverything = () => {
+		drawBackground();
+		drawSnake();
+		drawApple(canvas.width / 3, canvas.width / 3);
 	};
 
 	// game initialized and scanning the canvas for human interaction
 	setInterval(() => {
-		console.log('beep ... beep ...');
+		// console.log('beep ... beep ...');
 
 		// (heartbeat)
-		drawBackground();
-		drawSnake();
-		drawSnake();
-		drawSnake();
-		drawApple(canvas.width - 5, canvas.width - 5);
+		drawEverything();
 
 		// move the snake
 		// check to see if snake is eating apple
 		// check if snake is touching boundaries
 	}, 1000 / framesPerSecond);
 
-	window.addEventListener('keydown', keyEventListener);
+	window.addEventListener('keydown', (e) => {
+		e.preventDefault();
+		switch (e.key) {
+			case 'ArrowUp':
+				SNAKE.direction = 'up';
+				break;
+			case 'ArrowRight':
+				SNAKE.direction = 'right';
+				break;
+			case 'ArrowDown':
+				SNAKE.direction = 'down';
+				break;
+			case 'ArrowLeft':
+				SNAKE.direction = 'left';
+				break;
+			default:
+				break;
+		}
+	});
 };
