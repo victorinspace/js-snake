@@ -1,10 +1,12 @@
 window.onload = () => {
 	let canvas = document.getElementById('gameCanvas');
 	let canvasContext = canvas.getContext('2d');
+	let playerScore = 0;
+	let highScore = 0;
 	const framesPerSecond = 30;
 
 	const APPLE = {
-		size: 5,
+		size: 6,
 		color: 'red',
 		points: 1,
 	};
@@ -16,10 +18,11 @@ window.onload = () => {
 	};
 
 	const SNAKE = {
-		size: 10,
+		size: 11,
 		color: 'green',
 		travelSpeed: 5,
 		direction: 'up',
+		tail,
 	};
 
 	let snakePosition = {
@@ -76,18 +79,12 @@ window.onload = () => {
 		canvasContext.closePath();
 	};
 
-	const drawEverything = () => {
-		drawBackground();
-		drawSnake();
-		drawApple(120, 120);
-	};
-
 	// game initialized and scanning the canvas for human interaction
 	setInterval(() => {
 		// (heartbeat)
 
 		// move the snake
-		drawEverything();
+		// drawEverything();
 
 		// check to see if snake is eating apple
 		if (snakePosition.xPos === applePosition.xPos && snakePosition.yPos === applePosition.yPos) {
@@ -99,6 +96,11 @@ window.onload = () => {
 			console.log('hit!');
 		} else if (snakePosition.xPos === 0 || snakePosition.xPos === canvas.width) {
 			console.log('hit!');
+		} else {
+			// if snake isn't out of bounds, continue the game
+			drawBackground();
+			drawSnake();
+			drawApple(120, 120);
 		}
 	}, 1000 / framesPerSecond);
 
