@@ -2,50 +2,44 @@ window.onload = () => {
 	let canvas = document.getElementById('gameCanvas');
 	let canvasContext = canvas.getContext('2d');
 	let playerScore = 0;
-	let highScore = 0;
 	const framesPerSecond = 30;
 
-	const APPLE = {
+	let APPLE = {
 		size: 8,
 		color: 'red',
 		points: 1,
+    coordinates: {
+      xPos: 150,
+      yPos: 100
+    }
 	};
 
-	let applePosition = {
-		// initialize apple position
-		xPos: 150,
-		yPos: 100,
-	};
-
-	const SNAKE = {
+	let SNAKE = {
 		size: 15,
 		color: 'green',
 		travelSpeed: 5,
 		direction: 'up',
+    coordinates: {
+      xPos: canvas.width / 2,
+      yPos: canvas.width / 2
+    }
 	};
 
-	let snakePosition = {
-
-		// initialize snake position
-		xPos: canvas.width / 2,
-		yPos: canvas.width / 2,
-
-	};
+  const stopGame = () => {
+    clearInterval(gameInterval);
+    console.log('game stopped');
+  }
 
 	const randomEvenNumber = (canvasSize) => {
-
 		let randomNumber = Math.floor(Math.random() * canvasSize);
-
 		if (randomNumber % 2 === 1) {
 			randomNumber++;
 		}
-
 		return randomNumber;
-
 	};
 
 	const drawBackground = () => {
-    
+
 		canvasContext.beginPath();
 		canvasContext.fillStyle = 'black';
 		canvasContext.rect(0, 0, canvas.width, canvas.width);
@@ -56,24 +50,25 @@ window.onload = () => {
 
 	const drawSnake = () => {
 
+    // determine which way to draw snake
 		if (SNAKE.direction === 'up') {
-			snakePosition.yPos -= SNAKE.travelSpeed;
+			SNAKE.coordinates.yPos -= SNAKE.travelSpeed;
 		} else if (SNAKE.direction === 'right') {
-			snakePosition.xPos += SNAKE.travelSpeed;
+			SNAKE.coordinates.xPos += SNAKE.travelSpeed;
 		} else if (SNAKE.direction === 'down') {
-			snakePosition.yPos += SNAKE.travelSpeed;
+			SNAKE.coordinates.yPos += SNAKE.travelSpeed;
 		} else if (SNAKE.direction === 'left') {
-			snakePosition.xPos -= SNAKE.travelSpeed;
+			SNAKE.coordinates.xPos -= SNAKE.travelSpeed;
 		}
-
-		// console.log(SNAKE.direction);
-		console.log(`Snake position -- X: ${snakePosition.xPos}, Y: ${snakePosition.yPos}`);
 
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
-		canvasContext.rect(snakePosition.xPos, snakePosition.yPos, SNAKE.size, SNAKE.size);
+		canvasContext.rect(SNAKE.coordinates.xPos, SNAKE.coordinates.yPos, SNAKE.size, SNAKE.size);
 		canvasContext.fill();
 		canvasContext.closePath();
+
+    // console.log(SNAKE.direction);
+		console.log(`Snake position -- X: ${SNAKE.coordinates.xPos}, Y: ${SNAKE.coordinates.yPos}`);
 
 	};
 
@@ -81,8 +76,8 @@ window.onload = () => {
 
 		canvasContext.beginPath();
 		canvasContext.fillStyle = APPLE.color;
-		canvasContext.arc(applePosition.xPos, applePosition.yPos, APPLE.size, 0, Math.PI * 2, true);
-		// console.log(`Apple location: ${x} ${y}`);
+		canvasContext.arc(APPLE.coordinates.xPos, APPLE.coordinates.yPos, APPLE.size, 0, Math.PI * 2, true);
+		console.log(`Apple location: ${APPLE.coordinates.xPos} ${APPLE.coordinates.yPos}`);
 		canvasContext.fill();
 		canvasContext.closePath();
 
@@ -90,8 +85,8 @@ window.onload = () => {
 
   const snakeGetsApple = () => {
 
-    let deltaX = snakePosition.xPos - applePosition.xPos;
-    let deltaY = snakePosition.yPos - applePosition.yPos;
+    let deltaX = SNAKE.coordinates.xPos - APPLE.coordinates.xPos;
+    let deltaY = SNAKE.coordinates.yPos - APPLE.coordinates.yPos;
     let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     console.log(distance);
 
@@ -105,23 +100,26 @@ window.onload = () => {
 
 
 	// *** GAME INITIALIZED *** //
-	setInterval(() => {
+	let gameInterval = setInterval(() => {
 
 		// check to see if snake is eating apple
-		if (snakePosition.xPos === applePosition.xPos && snakePosition.yPos === applePosition.yPos) {
+		if (SNAKE.coordinates.xPos === APPLE.coordinates.xPos && SNAKE.coordinates.yPos === APPLE.coordinates.yPos) {
 			console.log('apple!');
 			playerScore++;
-
+      APPLE.coordinates.xPos = randomEvenNumber(canvas.width);
+      APPLE.coordinates.yPos = randomEvenNumber(canvas.width);
 		}
 
 		// check if snake is touching boundaries
-		if (snakePosition.yPos === 0 || snakePosition.yPos === canvas.width) {
+		if (SNAKE.coordinates.yPos === 0 || SNAKE.coordinates.yPos === canvas.width) {
 			console.log('hit!');
 			// game over
+      stopGame();
 			// check player high score
-		} else if (snakePosition.xPos === 0 || snakePosition.xPos === canvas.width) {
+		} else if (SNAKE.coordinates.xPos === 0 || SNAKE.coordinates.xPos === canvas.width) {
 			console.log('hit!');
 			// game over
+      stopGame();
 			// check player high score
 		} else {
 			// if snake isn't out of bounds, continue the game
@@ -157,3 +155,4 @@ window.onload = () => {
 	});
 
 };
+
