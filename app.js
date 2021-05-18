@@ -3,6 +3,31 @@ window.onload = () => {
 	let canvasContext = canvas.getContext('2d');
 	const framesPerSecond = 30;
 
+	const APPLE = {
+		size: 5,
+		color: 'red',
+		points: 1,
+	};
+
+	let applePosition = {
+		// initialize apple position
+		xPos: 120,
+		yPos: 120,
+	};
+
+	const SNAKE = {
+		size: 10,
+		color: 'green',
+		travelSpeed: 5,
+		direction: 'up',
+	};
+
+	let snakePosition = {
+		// initialize snake position
+		xPos: canvas.width / 2,
+		yPos: canvas.width / 2,
+	};
+
 	const randomEvenNumber = (canvasSize) => {
 		let randomNumber = Math.floor(Math.random() * canvasSize);
 
@@ -13,22 +38,6 @@ window.onload = () => {
 		return randomNumber;
 	};
 
-	const APPLE = {
-		size: 9,
-		color: 'red',
-		points: 1,
-	};
-
-	const SNAKE = {
-		size: 20,
-		color: 'green',
-		travelSpeed: 20,
-		coordinates: {
-			xPos: canvas.width / 2.1,
-			yPos: canvas.width / 2.1,
-		},
-	};
-
 	const drawBackground = () => {
 		canvasContext.beginPath();
 		canvasContext.fillStyle = 'black';
@@ -37,73 +46,79 @@ window.onload = () => {
 		canvasContext.closePath();
 	};
 
-	const drawSnake = (x, y) => {
+	const drawSnake = () => {
+		if (SNAKE.direction === 'up') {
+			snakePosition.yPos -= SNAKE.travelSpeed;
+		} else if (SNAKE.direction === 'right') {
+			snakePosition.xPos += SNAKE.travelSpeed;
+		} else if (SNAKE.direction === 'down') {
+			snakePosition.yPos += SNAKE.travelSpeed;
+		} else if (SNAKE.direction === 'left') {
+			snakePosition.xPos -= SNAKE.travelSpeed;
+		}
+
+		console.log(SNAKE.direction);
+		console.log(`Snake position -- X: ${snakePosition.xPos}, Y: ${snakePosition.yPos}`);
+
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
-		canvasContext.rect(x, y, SNAKE.size, SNAKE.size);
+		canvasContext.rect(snakePosition.xPos, snakePosition.yPos, SNAKE.size, SNAKE.size);
 		canvasContext.fill();
 		canvasContext.closePath();
 	};
 
-	const drawApple = (canvasContext) => {
+	const drawApple = (x, y) => {
 		canvasContext.beginPath();
 		canvasContext.fillStyle = APPLE.color;
-		canvasContext.arc(
-			randomEvenNumber(canvas.width - 5),
-			randomEvenNumber(canvas.width - 5),
-			APPLE.size,
-			0,
-			Math.PI * 2,
-			true
-		);
+		canvasContext.arc(applePosition.xPos, applePosition.yPos, APPLE.size, 0, Math.PI * 2, true);
+		console.log(`Apple location: ${x} ${y}`);
 		canvasContext.fill();
 		canvasContext.closePath();
 	};
 
-	drawApple(canvasContext);
-	drawSnake(SNAKE.coordinates.xPos, SNAKE.coordinates.yPos);
+	const drawEverything = () => {
+		drawBackground();
+		drawSnake();
+		drawApple(120, 120);
+	};
 
 	// game initialized and scanning the canvas for human interaction
 	setInterval(() => {
-		window.addEventListener('keydown', handleKeyDownEvent);
+		// (heartbeat)
+
+		// move the snake
+		drawEverything();
+
+		// check to see if snake is eating apple
+		if (snakePosition.xPos === applePosition.xPos && snakePosition.yPos === applePosition.yPos) {
+			console.log('apple!');
+		}
+
+		// check if snake is touching boundaries
+		if (snakePosition.yPos === 0 || snakePosition.yPos === canvas.width) {
+			console.log('hit!');
+		} else if (snakePosition.xPos === 0 || snakePosition.xPos === canvas.width) {
+			console.log('hit!');
+		}
 	}, 1000 / framesPerSecond);
 
-	const handleKeyDownEvent = (e) => {
-		snakeDirection(e);
-	};
-
-	const snakeDirection = (e) => {
+	window.addEventListener('keydown', (e) => {
+		e.preventDefault();
 		switch (e.key) {
 			case 'ArrowUp':
-				drawBackground();
-				drawSnake(
-					SNAKE.coordinates.xPos,
-					(SNAKE.coordinates.yPos -= SNAKE.travelSpeed)
-				);
+				SNAKE.direction = 'up';
 				break;
 			case 'ArrowRight':
-				drawBackground();
-				drawSnake(
-					(SNAKE.coordinates.xPos += SNAKE.travelSpeed),
-					SNAKE.coordinates.yPos
-				);
+				SNAKE.direction = 'right';
 				break;
 			case 'ArrowDown':
-				drawBackground();
-				drawSnake(
-					SNAKE.coordinates.xPos,
-					(SNAKE.coordinates.yPos += SNAKE.travelSpeed)
-				);
+				SNAKE.direction = 'down';
 				break;
 			case 'ArrowLeft':
-				drawBackground();
-				drawSnake(
-					(SNAKE.coordinates.xPos -= SNAKE.travelSpeed),
-					SNAKE.coordinates.yPos
-				);
+				SNAKE.direction = 'left';
 				break;
 			default:
 				break;
 		}
-	};
+	});
 };
