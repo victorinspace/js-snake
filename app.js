@@ -31,12 +31,9 @@ window.onload = () => {
 		color: 'green',
 		travelSpeed: 5,
 		direction: 'up',
-    head: {
-      xPos: canvas.width / 2,
-      yPos: canvas.width / 2
-    },
+    head: { xPos: 200, yPos: 200 },
     tail: [
-      { xPos: canvas.width / 2, yPos: canvas.width / 2 },
+      { xPos: 200, yPos: 200 },
       { xPos: canvas.width / 2, yPos: canvas.width / 2 },
       { xPos: canvas.width / 2, yPos: canvas.width / 2 },
     ]
@@ -57,7 +54,7 @@ window.onload = () => {
 
 	};
 
-	const drawSnake = () => {
+	const drawSnake = (x, y) => {
 
     // determine which way to draw snake
 		if (SNAKE.direction === 'up') {
@@ -72,7 +69,7 @@ window.onload = () => {
 
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
-		canvasContext.rect(SNAKE.head.xPos, SNAKE.head.yPos, SNAKE.size, SNAKE.size);
+		canvasContext.rect(x, y, SNAKE.size, SNAKE.size);
 		canvasContext.fill();
 		canvasContext.closePath();
 
@@ -133,7 +130,8 @@ window.onload = () => {
 		} else {
 			// if snake isn't out of bounds, continue the game
 			drawBackground();
-			drawSnake();
+			drawSnake(SNAKE.head.xPos, SNAKE.head.yPos);
+      drawSnake(SNAKE.tail[0].xPos, SNAKE.tail[0].yPos)
       drawApple()
       drawCurrentScore();
 		}
