@@ -4,13 +4,21 @@ window.onload = () => {
 	let playerScore = 0;
 	const framesPerSecond = 30;
 
+  const randomEvenNumber = (canvasSize) => {
+		let randomNumber = Math.floor(Math.random() * canvasSize);
+		if (randomNumber % 2 === 1) {
+			randomNumber++;
+		}
+		return randomNumber;
+	};
+
 	let APPLE = {
 		size: 8,
 		color: 'red',
 		points: 1,
     coordinates: {
-      xPos: 150,
-      yPos: 100
+      xPos: randomEvenNumber(canvas.width),
+      yPos: randomEvenNumber(canvas.width)
     }
 	};
 
@@ -19,9 +27,21 @@ window.onload = () => {
 		color: 'green',
 		travelSpeed: 5,
 		direction: 'up',
-    coordinates: {
-      xPos: canvas.width / 2,
-      yPos: canvas.width / 2
+    body: {
+      head: {
+        xPos: canvas.width / 2,
+        yPos: canvas.width / 2
+      },
+      tummy: {
+        xPos: canvas.width / 2,
+        yPos: canvas.width / 2
+      },
+      tail: {
+        1: {
+          xPos: canvas.width / 2,
+          yPos: canvas.width / 2
+        }
+      }
     }
 	};
 
@@ -29,14 +49,6 @@ window.onload = () => {
     clearInterval(gameInterval);
     console.log('game stopped');
   }
-
-	const randomEvenNumber = (canvasSize) => {
-		let randomNumber = Math.floor(Math.random() * canvasSize);
-		if (randomNumber % 2 === 1) {
-			randomNumber++;
-		}
-		return randomNumber;
-	};
 
 	const drawBackground = () => {
 
@@ -52,23 +64,23 @@ window.onload = () => {
 
     // determine which way to draw snake
 		if (SNAKE.direction === 'up') {
-			SNAKE.coordinates.yPos -= SNAKE.travelSpeed;
+			SNAKE.body.head.yPos -= SNAKE.travelSpeed;
 		} else if (SNAKE.direction === 'right') {
-			SNAKE.coordinates.xPos += SNAKE.travelSpeed;
+			SNAKE.body.head.xPos += SNAKE.travelSpeed;
 		} else if (SNAKE.direction === 'down') {
-			SNAKE.coordinates.yPos += SNAKE.travelSpeed;
+			SNAKE.body.head.yPos += SNAKE.travelSpeed;
 		} else if (SNAKE.direction === 'left') {
-			SNAKE.coordinates.xPos -= SNAKE.travelSpeed;
+			SNAKE.body.head.xPos -= SNAKE.travelSpeed;
 		}
 
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
-		canvasContext.rect(SNAKE.coordinates.xPos, SNAKE.coordinates.yPos, SNAKE.size, SNAKE.size);
+		canvasContext.rect(SNAKE.body.head.xPos, SNAKE.body.head.yPos, SNAKE.size, SNAKE.size);
 		canvasContext.fill();
 		canvasContext.closePath();
 
     // console.log(SNAKE.direction);
-		console.log(`Snake position -- X: ${SNAKE.coordinates.xPos}, Y: ${SNAKE.coordinates.yPos}`);
+		console.log(`Snake position -- X: ${SNAKE.body.head.xPos}, Y: ${SNAKE.body.head.yPos}`);
 
 	};
 
@@ -85,8 +97,8 @@ window.onload = () => {
 
   const snakeGetsApple = () => {
 
-    let deltaX = SNAKE.coordinates.xPos - APPLE.coordinates.xPos;
-    let deltaY = SNAKE.coordinates.yPos - APPLE.coordinates.yPos;
+    let deltaX = SNAKE.body.head.xPos - APPLE.coordinates.xPos;
+    let deltaY = SNAKE.body.head.yPos - APPLE.coordinates.yPos;
     let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     console.log(distance);
 
@@ -103,7 +115,7 @@ window.onload = () => {
 	let gameInterval = setInterval(() => {
 
 		// check to see if snake is eating apple
-		if (SNAKE.coordinates.xPos === APPLE.coordinates.xPos && SNAKE.coordinates.yPos === APPLE.coordinates.yPos) {
+		if (SNAKE.body.head.xPos === APPLE.coordinates.xPos && SNAKE.body.head.yPos === APPLE.coordinates.yPos) {
 			console.log('apple!');
 			playerScore++;
       APPLE.coordinates.xPos = randomEvenNumber(canvas.width);
@@ -111,12 +123,12 @@ window.onload = () => {
 		}
 
 		// check if snake is touching boundaries
-		if (SNAKE.coordinates.yPos === 0 || SNAKE.coordinates.yPos === canvas.width) {
+		if (SNAKE.body.head.yPos === 0 || SNAKE.body.head.yPos === canvas.width) {
 			console.log('hit!');
 			// game over
       stopGame();
 			// check player high score
-		} else if (SNAKE.coordinates.xPos === 0 || SNAKE.coordinates.xPos === canvas.width) {
+		} else if (SNAKE.body.head.xPos === 0 || SNAKE.body.head.xPos === canvas.width) {
 			console.log('hit!');
 			// game over
       stopGame();
