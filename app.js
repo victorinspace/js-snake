@@ -1,4 +1,6 @@
 window.onload = () => {
+  const DEBUG = false;
+
 	let canvas = document.getElementById('gameCanvas');
 	let canvasContext = canvas.getContext('2d');
 	let playerScore = 0;
@@ -16,7 +18,7 @@ window.onload = () => {
     total: 0
   }
 
-	let APPLE = {
+	const APPLE = {
 		size: 8,
 		color: 'red',
 		points: 1,
@@ -26,18 +28,19 @@ window.onload = () => {
     }
 	};
 
-	let SNAKE = {
+	const SNAKE = {
 		size: 15,
 		color: 'green',
 		travelSpeed: 5,
 		direction: 'up',
     head: { xPos: 200, yPos: 200 },
     tail: [
-      { xPos: 200, yPos: 200 },
+      { xPos: 220, yPos: 220 },
       { xPos: canvas.width / 2, yPos: canvas.width / 2 },
       { xPos: canvas.width / 2, yPos: canvas.width / 2 },
     ]
 	};
+  
 
   const stopGame = () => {
     clearInterval(gameInterval);
@@ -55,16 +58,33 @@ window.onload = () => {
 	};
 
 	const drawSnake = (x, y) => {
+    let snakeDirection = SNAKE.direction;
 
     // determine which way to draw snake
-		if (SNAKE.direction === 'up') {
+		if (snakeDirection === 'up') {
 			SNAKE.head.yPos -= SNAKE.travelSpeed;
-		} else if (SNAKE.direction === 'right') {
+      SNAKE.tail[0].yPos -= SNAKE.travelSpeed
+      // for (let i = 0; i < SNAKE.tail.length; i++) {
+      //   return SNAKE.tail[i].yPos -= SNAKE.travelSpeed;
+      // }
+		} else if (snakeDirection === 'right') {
 			SNAKE.head.xPos += SNAKE.travelSpeed;
-		} else if (SNAKE.direction === 'down') {
+      SNAKE.tail[0].xPos += SNAKE.travelSpeed;
+      // for (let i = 0; i < SNAKE.tail.length; i++) {
+      //   return SNAKE.tail[i].xPos += SNAKE.travelSpeed;
+      // }
+		} else if (snakeDirection === 'down') {
 			SNAKE.head.yPos += SNAKE.travelSpeed;
-		} else if (SNAKE.direction === 'left') {
+SNAKE.tail[0].yPos += SNAKE.travelSpeed;
+      // for (let i = 0; i < SNAKE.tail.length; i++) {
+      //   return SNAKE.tail[i].yPos += SNAKE.travelSpeed;
+      // }
+		} else if (snakeDirection === 'left') {
 			SNAKE.head.xPos -= SNAKE.travelSpeed;
+SNAKE.tail[0].xPos -= SNAKE.travelSpeed;
+      // for (let i = 0; i < SNAKE.tail.length; i++) {
+      //   return SNAKE.tail[i].xPos -= SNAKE.travelSpeed;
+      // }
 		}
 
 		canvasContext.beginPath();
@@ -102,6 +122,11 @@ window.onload = () => {
     canvasContext.font = '10px Arial';
     canvasContext.fillStyle = 'white';
     canvasContext.fillText(`Score: ${playerScore}`, 6, 13);
+  }
+
+  if (DEBUG === true) {
+    APPLE.coordinates.xPos = 150,
+    APPLE.coordinates.yPos = 100
   }
 
 
