@@ -34,10 +34,11 @@ window.onload = () => {
 		travelSpeed: 20,
 		direction: 'right',
     body: [
+      { xPos: 80, yPos: 200 },
       { xPos: 60, yPos: 200 },
-      { xPos: 40, yPos: 240 },
-      { xPos: 20, yPos: 260 },
-      { xPos: 0, yPos: 280 },
+      { xPos: 40, yPos: 200 },
+      { xPos: 20, yPos: 200 },
+      { xPos: 0, yPos: 200 },
     ]
 	};
   
@@ -137,10 +138,14 @@ window.onload = () => {
 		} else {
 			drawBackground();
 			
-      drawSnake(SNAKE.body[0].xPos, SNAKE.body[0].yPos);
-      drawSnake(SNAKE.body[1].xPos, SNAKE.body[1].yPos);
-
+      // drawSnake(SNAKE.body[0].xPos, SNAKE.body[0].yPos);
+      // drawSnake(SNAKE.body[1].xPos, SNAKE.body[1].yPos);
+      // drawSnake(SNAKE.body[2].xPos, SNAKE.body[2].yPos);
+      // drawSnake(SNAKE.body[3].xPos, SNAKE.body[3].yPos);
       
+      for (let i = 0; i < SNAKE.body.length; i++) {
+        drawSnake(SNAKE.body[i].xPos, SNAKE.body[i].yPos);
+      }
       
       drawApple();
       console.log(`apl: ${APPLE.coordinates.xPos}, ${APPLE.coordinates.xPos}`);
