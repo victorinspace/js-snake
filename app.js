@@ -1,5 +1,5 @@
 window.onload = () => {
-  const DEBUG = false;
+  const DEBUG = true;
 
 	let canvas = document.getElementById('gameCanvas');
 	let canvasContext = canvas.getContext('2d');
@@ -29,15 +29,15 @@ window.onload = () => {
 	};
 
 	const SNAKE = {
-		size: 10,
+		size: 20,
 		color: 'green',
-		travelSpeed: 10,
-		direction: 'up',
+		travelSpeed: 20,
+		direction: 'right',
     body: [
-      { xPos: 200, yPos: 200 },
-      { xPos: 200, yPos: 221 },
-      { xPos: 200, yPos: 241 },
-      { xPos: 200, yPos: 251 },
+      { xPos: 60, yPos: 200 },
+      { xPos: 40, yPos: 240 },
+      { xPos: 20, yPos: 260 },
+      { xPos: 0, yPos: 280 },
     ]
 	};
   
@@ -47,34 +47,34 @@ window.onload = () => {
   }
 
 	const drawBackground = () => {
-
 		canvasContext.beginPath();
 		canvasContext.fillStyle = 'black';
 		canvasContext.rect(0, 0, canvas.width, canvas.width);
 		canvasContext.fill();
 		canvasContext.closePath();
-
 	};
 
-	const drawSnake = (x, y) => {
+  const moveSnake = () => {
     let snakeDirection = SNAKE.direction;
+    const snakeCopy = SNAKE.body.map(snakePart => Object.assign({}, snakePart))
 
-    // determine which way to draw snake
 		if (snakeDirection === 'up') {
 			SNAKE.body[0].yPos -= SNAKE.travelSpeed;
-      SNAKE.body[1].yPos -= SNAKE.travelSpeed
 		} else if (snakeDirection === 'right') {
 			SNAKE.body[0].xPos += SNAKE.travelSpeed;
-      SNAKE.body[1].xPos += SNAKE.travelSpeed;
 		} else if (snakeDirection === 'down') {
 			SNAKE.body[0].yPos += SNAKE.travelSpeed;
-      SNAKE.body[1].yPos += SNAKE.travelSpeed;
 		} else if (snakeDirection === 'left') {
 			SNAKE.body[0].xPos -= SNAKE.travelSpeed;
-      SNAKE.body[1].xPos -= SNAKE.travelSpeed;
-
 		}
 
+    // set position for snake body (not head)
+    for (let i = 1; i < SNAKE.body.length; i++) {
+      SNAKE.body[i] = snakeCopy[i - 1];
+    }
+  }
+
+	const drawSnake = (x, y) => {
 		canvasContext.beginPath();
 		canvasContext.fillStyle = SNAKE.color;
 		canvasContext.rect(x, y, SNAKE.size, SNAKE.size);
@@ -109,17 +109,17 @@ window.onload = () => {
 		}
   }
 
-  // *** == Debuging Env == *** //
+// *** == Debuging Env == *** //
   if (DEBUG === true) {
-    APPLE.coordinates.xPos = 200;
-    APPLE.coordinates.yPos = 160;
+    APPLE.coordinates.xPos = 60;
+    APPLE.coordinates.yPos = 200;
     framesPerSecond = 500;
   }
 
 
-  // *** == GAME INITIALIZED == *** //
+// *** == GAME INITIALIZED == *** //
 	let gameInterval = setInterval(() => {
-
+    moveSnake();
     doesSnakeEatApple();
 
 		// check if snake hits a wall
@@ -139,6 +139,8 @@ window.onload = () => {
 			
       drawSnake(SNAKE.body[0].xPos, SNAKE.body[0].yPos);
       drawSnake(SNAKE.body[1].xPos, SNAKE.body[1].yPos);
+
+      
       
       drawApple();
       console.log(`apl: ${APPLE.coordinates.xPos}, ${APPLE.coordinates.xPos}`);
@@ -150,7 +152,6 @@ window.onload = () => {
 
 
 	window.addEventListener('keydown', (e) => {
-
 		e.preventDefault();
 		switch (e.key) {
 			case 'ArrowUp':
@@ -168,7 +169,6 @@ window.onload = () => {
 			default:
 				break;
 		}
-
 	});
 
 };
