@@ -9,7 +9,17 @@ canvas {
 	margin: 0 auto;
 }
 
+#game-header {
+  margin: 0 auto;
+  width: 400px;
+}
+
 h1 {
 	text-align: center;
-	padding: 13px 0 7px;
+	padding: 10px 0 5px;
+}
+
+h2 {
+  font-size: 15px;
+	padding: 7px 0 3px;
 }
