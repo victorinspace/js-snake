@@ -1,5 +1,5 @@
 window.onload = () => {
-  const DEBUG = false;
+  const DEBUG = true;
 
   let canvas = document.getElementById( 'gameCanvas' );
   let canvasContext = canvas.getContext( '2d' );
@@ -24,10 +24,10 @@ window.onload = () => {
     travelSpeed: 5,
     direction: 'right',
     body: [
+      { xPos: 80, yPos: 200 },
       { xPos: 60, yPos: 200 },
       { xPos: 40, yPos: 200 },
       { xPos: 20, yPos: 200 },
-      { xPos: 0, yPos: 200 },
     ]
   };
 
@@ -82,32 +82,21 @@ window.onload = () => {
     canvasContext.closePath();
   };
 
-  const drawCurrentScore = () => {
-    canvasContext.font = '10px Arial';
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillText( `Score: ${playerScore}`, 6, 13 );
-
-    document.getElementById( 'player-score' ).append( playerScore );
-  }
+  const updatePlayerScore = () => document.getElementById( 'player-score' ).append( playerScore );
 
   const doesSnakeEatApple = () => {
-    console.log( APPLE.coordinates.xPos, APPLE.coordinates.yPos );
-    console.log( SNAKE.body[0].xPos, SNAKE.body[0].yPos )
-
-    if ( SNAKE.body[0].xPos === APPLE.coordinates.xPos &&
-      SNAKE.body[0].yPos === APPLE.coordinates.yPos ) {
+    if ( SNAKE.body[0].xPos === APPLE.coordinates.xPos && SNAKE.body[0].yPos === APPLE.coordinates.yPos ) {
       playerScore++;
+      updatePlayerScore();
+
       APPLE.coordinates.xPos = randomGridPosition();
       APPLE.coordinates.yPos = randomGridPosition();
-      drawCurrentScore();
     }
-
-
   }
 
   // *** == Debuging Env == *** //
   if ( DEBUG === true ) {
-    APPLE.coordinates.xPos = 200;
+    APPLE.coordinates.xPos = 140;
     APPLE.coordinates.yPos = 200;
     framesPerSecond = 500;
   }
@@ -122,7 +111,7 @@ window.onload = () => {
     if ( SNAKE.body[0].yPos === 0 || SNAKE.body[0].yPos === canvas.width ) {
 
       console.log( 'Wall Hit! Game Over!' );
-      console.log( `snake: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
+      console.log( `snake head: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
 
       stopGame();
       // check player high score
@@ -130,7 +119,7 @@ window.onload = () => {
     } else if ( SNAKE.body[0].xPos === 0 || SNAKE.body[0].xPos === canvas.width ) {
 
       console.log( 'Wall Hit! Game Over!' );
-      console.log( `snake: ${SNAKE.body[0].xPos}, Y: ${SNAKE.body[0].yPos}` );
+      console.log( `snake head: ${SNAKE.body[0].xPos}, Y: ${SNAKE.body[0].yPos}` );
 
       stopGame();
       // check player high score
