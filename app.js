@@ -6,7 +6,7 @@ window.onload = () => {
   let playerScore = 0;
   let framesPerSecond = 1000 / 8;
 
-  const randomGridPosition = () => Math.floor( Math.random() * canvas.width / 20 ) * 20 + 20;
+  const randomGridPosition = () => Math.floor( Math.random() * canvas.width / 20 ) * 20;
   const updatePlayerScore = () => document.getElementById( 'player-score' ).innerText = `Score: ${playerScore}`;
   const stopGame = () => clearInterval( gameInterval );
   const clearCanvas = () => canvasContext.clearRect( 0, 0, canvas.width, canvas.height );
