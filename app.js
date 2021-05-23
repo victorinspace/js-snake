@@ -51,7 +51,6 @@ window.onload = () => {
   };
 
   const drawApple = () => {
-    console.log( `apple: ${APPLE.coordinates.xPos} ${APPLE.coordinates.yPos}` )
     canvasContext.beginPath();
     canvasContext.fillStyle = APPLE.color;
     canvasContext.rect( APPLE.coordinates.xPos, APPLE.coordinates.yPos, APPLE.size, APPLE.size );
