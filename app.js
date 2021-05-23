@@ -4,16 +4,16 @@ window.onload = () => {
   let canvas = document.getElementById( 'gameCanvas' );
   let canvasContext = canvas.getContext( '2d' );
   let playerScore = 0;
-  let gridSize = 20;
+  // let gridSize = 20;
   let framesPerSecond = 1000 / 8;
 
   const randomGridPosition = () => Math.floor( Math.random() * canvas.width / 20 ) * 20 + 20;
   const updatePlayerScore = () => document.getElementById( 'player-score' ).innerText = `Score: ${playerScore}`;
   const stopGame = () => clearInterval( gameInterval );
-  const resetGame = () => canvasContext.clearRect( 0, 0, canvas.width, canvas.height );
+  const clearCanvas = () => canvasContext.clearRect( 0, 0, canvas.width, canvas.height );
 
   const APPLE = {
-    size: 10,
+    size: 20,
     color: 'red',
     points: 1,
     coordinates: {
@@ -54,10 +54,7 @@ window.onload = () => {
   const drawApple = () => {
     canvasContext.beginPath();
     canvasContext.fillStyle = APPLE.color;
-    canvasContext.arc(
-      APPLE.coordinates.xPos, APPLE.coordinates.yPos,
-      APPLE.size, 0,
-      Math.PI * 2 );
+    canvasContext.rect( APPLE.coordinates.xPos, APPLE.coordinates.yPos, APPLE.size, APPLE.size );
     canvasContext.fill();
     canvasContext.closePath();
   };
@@ -87,6 +84,10 @@ window.onload = () => {
       playerScore++;
       updatePlayerScore();
 
+      let lastSnakePart = SNAKE.body[SNAKE.body.length - 1];
+
+      SNAKE.body.push( { xPos: lastSnakePart + 20, yPos: lastSnakePart + 20 } )
+
       APPLE.coordinates.xPos = randomGridPosition();
       APPLE.coordinates.yPos = randomGridPosition();
 
@@ -96,14 +97,19 @@ window.onload = () => {
   }
 
   const doesSnakeHitItself = () => {
-    for ( let i = 0; i < SNAKE.body.length; i++ ) {
-      SNAKE.body[i].xPos;
+    for ( let i = 1; i < SNAKE.body.length; i++ ) {
+      let snakePart = SNAKE.body[i];
 
+      if ( SNAKE.body[0].xPos === snakePart.xPos && SNAKE.body[0].yPos === snakePart.yPos ) {
+        gameOver();
+        break;
+      }
     }
   }
 
   const gameOver = () => {
-    resetGame()
+    stopGame();
+    clearCanvas()
     canvasContext.fillStyle = 'white';
     canvasContext.font = '50px Verdana';
     canvasContext.fillText( 'Game Over!', canvas.width / 8, canvas.height / 2 );
@@ -120,29 +126,22 @@ window.onload = () => {
   let gameInterval = setInterval( () => {
     moveSnake();
     doesSnakeEatApple();
-    doesSnakeHitItself();
 
     // == check if snake hits a wall== //
     if ( SNAKE.body[0].yPos === 0 || SNAKE.body[0].yPos === canvas.width ) {
-      console.log( 'Wall Hit! Game Over!' );
-      console.log( `snake head: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
-
-      stopGame();
       gameOver();
     } else if ( SNAKE.body[0].xPos === 0 || SNAKE.body[0].xPos === canvas.width ) {
-      console.log( 'Wall Hit! Game Over!' );
-      console.log( `snake head: ${SNAKE.body[0].xPos}, Y: ${SNAKE.body[0].yPos}` );
-
-      stopGame();
       gameOver();
     } else {
+      // if snake is clear, continue game
       drawBackground();
+      drawApple();
 
       for ( let i = 0; i < SNAKE.body.length; i++ ) {
         drawSnake( SNAKE.body[i].xPos, SNAKE.body[i].yPos );
       }
 
-      drawApple();
+      doesSnakeHitItself();
     }
   }, framesPerSecond );
 
