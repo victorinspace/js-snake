@@ -4,9 +4,12 @@ window.onload = () => {
   let canvas = document.getElementById( 'gameCanvas' );
   let canvasContext = canvas.getContext( '2d' );
   let playerScore = 0;
-  let framesPerSecond = 1000 / 30;
+  let framesPerSecond = 1000 / 8;
 
   const randomGridPosition = () => Math.floor( Math.random() * canvas.width / 20 ) * 20 + 20;
+  const updatePlayerScore = () => document.getElementById( 'player-score' ).innerText = `Score: ${playerScore}`;
+  const stopGame = () => clearInterval( gameInterval );
+  const resetGame = () => canvasContext.clearRect( 0, 0, canvas.width, canvas.height );
 
   const APPLE = {
     size: 10,
@@ -21,24 +24,39 @@ window.onload = () => {
   const SNAKE = {
     size: 20,
     color: 'green',
-    travelSpeed: 5,
+    travelSpeed: 20,
     direction: 'right',
     body: [
+      { xPos: 80, yPos: 200 },
       { xPos: 60, yPos: 200 },
       { xPos: 40, yPos: 200 },
       { xPos: 20, yPos: 200 },
-      { xPos: 0, yPos: 200 },
     ]
   };
-
-  const stopGame = () => {
-    clearInterval( gameInterval );
-  }
 
   const drawBackground = () => {
     canvasContext.beginPath();
     canvasContext.fillStyle = 'black';
-    canvasContext.rect( 0, 0, canvas.width, canvas.width );
+    canvasContext.rect( 0, 0, canvas.width, canvas.height );
+    canvasContext.fill();
+    canvasContext.closePath();
+  };
+
+  const drawSnake = ( x, y ) => {
+    canvasContext.beginPath();
+    canvasContext.fillStyle = SNAKE.color;
+    canvasContext.rect( x, y, SNAKE.size, SNAKE.size );
+    canvasContext.fill();
+    canvasContext.closePath();
+  };
+
+  const drawApple = () => {
+    canvasContext.beginPath();
+    canvasContext.fillStyle = APPLE.color;
+    canvasContext.arc(
+      APPLE.coordinates.xPos, APPLE.coordinates.yPos,
+      APPLE.size, 0,
+      Math.PI * 2 );
     canvasContext.fill();
     canvasContext.closePath();
   };
@@ -63,51 +81,22 @@ window.onload = () => {
     }
   }
 
-  const drawSnake = ( x, y ) => {
-    canvasContext.beginPath();
-    canvasContext.fillStyle = SNAKE.color;
-    canvasContext.rect( x, y, SNAKE.size, SNAKE.size );
-    canvasContext.fill();
-    canvasContext.closePath();
-  };
-
-  const drawApple = () => {
-    canvasContext.beginPath();
-    canvasContext.fillStyle = APPLE.color;
-    canvasContext.arc(
-      APPLE.coordinates.xPos, APPLE.coordinates.yPos,
-      APPLE.size, 0,
-      Math.PI * 2 );
-    canvasContext.fill();
-    canvasContext.closePath();
-  };
-
-  const drawCurrentScore = () => {
-    canvasContext.font = '10px Arial';
-    canvasContext.fillStyle = 'white';
-    canvasContext.fillText( `Score: ${playerScore}`, 6, 13 );
-
-    document.getElementById( 'player-score' ).append( playerScore );
-  }
-
   const doesSnakeEatApple = () => {
-    console.log( APPLE.coordinates.xPos, APPLE.coordinates.yPos );
-    console.log( SNAKE.body[0].xPos, SNAKE.body[0].yPos )
-
-    if ( SNAKE.body[0].xPos === APPLE.coordinates.xPos &&
-      SNAKE.body[0].yPos === APPLE.coordinates.yPos ) {
+    if ( SNAKE.body[0].xPos === APPLE.coordinates.xPos && SNAKE.body[0].yPos === APPLE.coordinates.yPos ) {
       playerScore++;
+      updatePlayerScore();
+
       APPLE.coordinates.xPos = randomGridPosition();
       APPLE.coordinates.yPos = randomGridPosition();
-      drawCurrentScore();
+
+      console.log( `Snake: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
+      console.log( `Apple: ${APPLE.coordinates.xPos}, ${APPLE.coordinates.yPos}` );
     }
-
-
   }
 
   // *** == Debuging Env == *** //
   if ( DEBUG === true ) {
-    APPLE.coordinates.xPos = 200;
+    APPLE.coordinates.xPos = 140;
     APPLE.coordinates.yPos = 200;
     framesPerSecond = 500;
   }
@@ -122,7 +111,7 @@ window.onload = () => {
     if ( SNAKE.body[0].yPos === 0 || SNAKE.body[0].yPos === canvas.width ) {
 
       console.log( 'Wall Hit! Game Over!' );
-      console.log( `snake: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
+      console.log( `snake head: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
 
       stopGame();
       // check player high score
@@ -130,7 +119,7 @@ window.onload = () => {
     } else if ( SNAKE.body[0].xPos === 0 || SNAKE.body[0].xPos === canvas.width ) {
 
       console.log( 'Wall Hit! Game Over!' );
-      console.log( `snake: ${SNAKE.body[0].xPos}, Y: ${SNAKE.body[0].yPos}` );
+      console.log( `snake head: ${SNAKE.body[0].xPos}, Y: ${SNAKE.body[0].yPos}` );
 
       stopGame();
       // check player high score
@@ -141,6 +130,7 @@ window.onload = () => {
 
       for ( let i = 0; i < SNAKE.body.length; i++ ) {
         drawSnake( SNAKE.body[i].xPos, SNAKE.body[i].yPos );
+        console.log( SNAKE.body[i].xPos )
       }
 
       drawApple();
