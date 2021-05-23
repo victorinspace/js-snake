@@ -4,7 +4,6 @@ window.onload = () => {
   let canvas = document.getElementById( 'gameCanvas' );
   let canvasContext = canvas.getContext( '2d' );
   let playerScore = 0;
-  // let gridSize = 20;
   let framesPerSecond = 1000 / 8;
 
   const randomGridPosition = () => Math.floor( Math.random() * canvas.width / 20 ) * 20 + 20;
@@ -52,6 +51,7 @@ window.onload = () => {
   };
 
   const drawApple = () => {
+    console.log( `apple: ${APPLE.coordinates.xPos} ${APPLE.coordinates.yPos}` )
     canvasContext.beginPath();
     canvasContext.fillStyle = APPLE.color;
     canvasContext.rect( APPLE.coordinates.xPos, APPLE.coordinates.yPos, APPLE.size, APPLE.size );
@@ -86,13 +86,10 @@ window.onload = () => {
 
       let lastSnakePart = SNAKE.body[SNAKE.body.length - 1];
 
-      SNAKE.body.push( { xPos: lastSnakePart + 20, yPos: lastSnakePart + 20 } )
+      SNAKE.body.push( { xPos: lastSnakePart + 20, yPos: lastSnakePart + 20 } );
 
       APPLE.coordinates.xPos = randomGridPosition();
       APPLE.coordinates.yPos = randomGridPosition();
-
-      console.log( `Snake: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
-      console.log( `Apple: ${APPLE.coordinates.xPos}, ${APPLE.coordinates.yPos}` );
     }
   }
 
