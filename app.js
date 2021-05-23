@@ -1,25 +1,12 @@
 window.onload = () => {
-  const DEBUG = true;
+  const DEBUG = false;
 
-  // GRID = 20px
   let canvas = document.getElementById( 'gameCanvas' );
   let canvasContext = canvas.getContext( '2d' );
   let playerScore = 0;
   let framesPerSecond = 1000 / 30;
 
-  const randomGridPosition = () => {
-    let randomNumber = ( Math.floor( Math.random() * ( canvas.width - 1 + 1 ) + 1 ) ) * 20;
-
-    // if ( randomNumber % 2 === 1 ) {
-    //   randomNumber++;
-    // }
-
-    return randomNumber;
-  };
-
-  let score = {
-    total: 0
-  }
+  const randomGridPosition = () => Math.floor( Math.random() * canvas.width / 20 ) * 20 + 20;
 
   const APPLE = {
     size: 10,
@@ -131,7 +118,7 @@ window.onload = () => {
     moveSnake();
     doesSnakeEatApple();
 
-    // check if snake hits a wall
+    // == check if snake hits a wall== //
     if ( SNAKE.body[0].yPos === 0 || SNAKE.body[0].yPos === canvas.width ) {
 
       console.log( 'Wall Hit! Game Over!' );
@@ -144,6 +131,7 @@ window.onload = () => {
 
       console.log( 'Wall Hit! Game Over!' );
       console.log( `snake: ${SNAKE.body[0].xPos}, Y: ${SNAKE.body[0].yPos}` );
+
       stopGame();
       // check player high score
 
@@ -156,12 +144,8 @@ window.onload = () => {
       }
 
       drawApple();
-      // console.log( `apl: ${APPLE.coordinates.xPos}, ${APPLE.coordinates.xPos}` );
-
-      // drawCurrentScore();
 
     }
-
   }, framesPerSecond );
 
 
@@ -184,6 +168,5 @@ window.onload = () => {
         break;
     }
   } );
-
 };
 
