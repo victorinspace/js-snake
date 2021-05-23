@@ -1,5 +1,5 @@
 window.onload = () => {
-  const DEBUG = true;
+  const DEBUG = false;
 
   let canvas = document.getElementById( 'gameCanvas' );
   let canvasContext = canvas.getContext( '2d' );
