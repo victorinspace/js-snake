@@ -4,6 +4,7 @@ window.onload = () => {
   let canvas = document.getElementById( 'gameCanvas' );
   let canvasContext = canvas.getContext( '2d' );
   let playerScore = 0;
+  let gridSize = 20;
   let framesPerSecond = 1000 / 8;
 
   const randomGridPosition = () => Math.floor( Math.random() * canvas.width / 20 ) * 20 + 20;
@@ -94,6 +95,20 @@ window.onload = () => {
     }
   }
 
+  const doesSnakeHitItself = () => {
+    for ( let i = 0; i < SNAKE.body.length; i++ ) {
+      SNAKE.body[i].xPos;
+
+    }
+  }
+
+  const gameOver = () => {
+    resetGame()
+    canvasContext.fillStyle = 'white';
+    canvasContext.font = '50px Verdana';
+    canvasContext.fillText( 'Game Over!', canvas.width / 8, canvas.height / 2 );
+  }
+
   // *** == Debuging Env == *** //
   if ( DEBUG === true ) {
     APPLE.coordinates.xPos = 140;
@@ -101,40 +116,33 @@ window.onload = () => {
     framesPerSecond = 500;
   }
 
-
   // *** == GAME INITIALIZED == *** //
   let gameInterval = setInterval( () => {
     moveSnake();
     doesSnakeEatApple();
+    doesSnakeHitItself();
 
     // == check if snake hits a wall== //
     if ( SNAKE.body[0].yPos === 0 || SNAKE.body[0].yPos === canvas.width ) {
-
       console.log( 'Wall Hit! Game Over!' );
       console.log( `snake head: ${SNAKE.body[0].xPos}, ${SNAKE.body[0].yPos}` );
 
       stopGame();
-      // check player high score
-
+      gameOver();
     } else if ( SNAKE.body[0].xPos === 0 || SNAKE.body[0].xPos === canvas.width ) {
-
       console.log( 'Wall Hit! Game Over!' );
       console.log( `snake head: ${SNAKE.body[0].xPos}, Y: ${SNAKE.body[0].yPos}` );
 
       stopGame();
-      // check player high score
-
+      gameOver();
     } else {
-
       drawBackground();
 
       for ( let i = 0; i < SNAKE.body.length; i++ ) {
         drawSnake( SNAKE.body[i].xPos, SNAKE.body[i].yPos );
-        console.log( SNAKE.body[i].xPos )
       }
 
       drawApple();
-
     }
   }, framesPerSecond );
 
