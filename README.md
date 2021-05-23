@@ -1,7 +1,7 @@
 # js-snake
 The classic snake game written in vanilla JavaScript, HTML and CSS.
 
-[Click here to do some maths!](https://victorinspace.github.io/js-snake/)
+[Play the game!](https://victorinspace.github.io/js-snake/)
 
 ![](https://github.com/victorinspace/js-snake/blob/main/snake-game.png)
 
